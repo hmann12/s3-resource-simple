@@ -1,0 +1,22 @@
+resources:
+- name: s3-resource-simple-docker
+  type: git
+  source:
+    uri: https://github.com/pivotal-sydney/s3-resource-simple.git
+    branch: master
+
+- name: image-release
+  type: docker-image
+  source:
+    email: {{docker-email}}
+    username: {{docker-username}}
+    password: {{docker-password}}
+    repository: pivotalsydney/s3-resource-simple
+
+jobs:
+- name: build-image-release
+  plan:
+  - get: s3-resource-simple-docker
+    trigger: true
+  - put: image-release
+    params: {build: s3-resource-simple-docker}
